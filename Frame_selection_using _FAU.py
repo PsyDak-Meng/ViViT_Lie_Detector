@@ -35,6 +35,8 @@ AU_definitions = {
     'AU25' : [(50, 52), (58, 56), (51, 53), (57, 55)]  # Lips part
 }
 # Add more AU definitions as needed
+
+# Functions
 def smooth_sequence(seq, window_len):
     filtered_sequence = scipy.signal.savgol_filter(seq, window_length=window_len, polyorder=3)
     return filtered_sequence
@@ -72,12 +74,13 @@ def remove_duplicates_within_range(nums, threshold):
 
     return filtered_nums
 
-# Open a video file
-#video_path = "C:/Users/Fkhan/Videos/fe_hm.mp4"
+# video file directory
 directory_path = f'C:/Users\Fkhan\OneDrive - Georgia Institute of Technology\Coursework\Spring 2024\CS 6476\Group_project\MU3D_dataset\Videos\Videos/'
+# get all the video file names in the directory
 video_file_names = os.listdir(directory_path)
 
-for file_name in video_file_names[0:1]:
+#iterate through all the files 
+for file_name in video_file_names[1:2]:
     #video_file_name = "BF015_1PT.wmv"
     video_path = f'{directory_path}/{file_name}'
     cap = cv2.VideoCapture(video_path)
@@ -95,8 +98,7 @@ for file_name in video_file_names[0:1]:
         if not ret:
             break
     
-         # Flip the frame vertically
-        #frame = cv2.flip(frame, 0)
+        #append each frame to a list
         frames.append(frame.copy())
         # Convert the frame to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -158,23 +160,34 @@ for file_name in video_file_names[0:1]:
     """        
     # Initialize an empty list to store FAU peaks sequence
     FAU_peaks = {au: [] for au in AU_definitions}
+    # Inititalize a multiplot figure that shows the FAU sequence and the selected frames
     fig, axes = plt.subplots(nrows=len(AU_sequence), ncols=1, figsize=(10, 5 * len(AU_sequence)))
     
+    #iterate through each AU
     for i, (au, sequence) in enumerate(AU_sequence.items()):
         sequence = np.array(sequence)
         combined_peaks = []
+        
+        # Iterate through each points of the AU 
         for j in range (np.shape(sequence)[1]):
             seq = [au_seq[j] for au_seq in sequence]
             peaks, filtered_sequence = peak_cwt(seq)
             combined_peaks = combined_peaks + [peaks]
+        #flatten the peaks
         flattened_peaks = [item for sublist in combined_peaks for item in sublist]
+        
+        #get unique peaks
         unique_peaks = sorted(set(flattened_peaks))
+        
+        #Remove frames that are closer to each other. Threshold set to 5
         filtered_peaks = remove_duplicates_within_range(unique_peaks,5)
+        
+        #convert peak values to int datatype
         filtered_peaks = [int(x) for x in filtered_peaks]
         # Append the AU_frame to the sequence
         FAU_peaks[au].append(filtered_peaks)
         
-        sequence = np.array(sequence)
+        #plot AU sequences and peak frame location (red vertical line)
         axes[i].plot(sequence)
         #axes[i].plot(filtered_sequence)
         axes[i].set_title(f'{au} Sequence')
@@ -182,7 +195,8 @@ for file_name in video_file_names[0:1]:
         axes[i].set_ylabel('AU Intensity')
         for x in peaks:
             axes[i].axvline(x, color='red', linestyle='--', linewidth=1)
-    
+
+    #plot significant frames for specific AU    
     Significant_frames = FAU_peaks['AU1'][0]
     for i in Significant_frames:
         frame_num = i
@@ -191,12 +205,16 @@ for file_name in video_file_names[0:1]:
         plt.title(f' {frame_num}th Frame from the Video')
         plt.axis('off')
         plt.show()
-    
+
+    #Merge peaks based on different AUs
     flattened_all_peaks = [item for sublist in FAU_peaks for lists in FAU_peaks[sublist] for item in lists]
     unique_all_peaks = remove_duplicates_within_range(sorted(set(flattened_all_peaks)),5)
     save_path = f'C:/Users\Fkhan\OneDrive - Georgia Institute of Technology\Coursework\Spring 2024\CS 6476\Group_project\MU3D_processed/{file_name}'
+    
     if not os.path.exists(save_path):
         os.makedirs(save_path)
+    
+    # Iterate through all the peaks, plot corresponding frames.
     for i in unique_all_peaks:
         frame_num = i
         img_height, img_width, _ = frames[frame_num].shape
@@ -211,6 +229,7 @@ for file_name in video_file_names[0:1]:
         plt.savefig (f'{save_path}/{i}.png')
         plt.close('all')
     
+    #Save peaks for each AU as a dictionary
     # Specify the file path
     dict_path = f'{save_path}/peaks_dictionary.json'
     
@@ -218,6 +237,7 @@ for file_name in video_file_names[0:1]:
     with open(dict_path, 'w') as json_file:
         json.dump(FAU_peaks, json_file)
     
+    # Save the list of significant frames
     # Specify the file path
     list_path = f'{save_path}/unique_peaks.json'
     # Save the list to a CSV file
