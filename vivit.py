@@ -88,6 +88,43 @@ class ViViT(nn.Module):
 
 
 #TODO: Extract attention weights
+def patch_attention(m):
+    forward_orig = m.forward
+
+    def wrap(*args, **kwargs):
+        kwargs["need_weights"] = True
+        kwargs["average_attn_weights"] = False
+
+        return forward_orig(*args, **kwargs)
+
+    m.forward = wrap
+
+
+class SaveOutput:
+    def __init__(self):
+        self.outputs = []
+
+    def __call__(self, module, module_in, module_out):
+        self.outputs.append(module_out[1])
+
+    def clear(self):
+        self.outputs = []
+
+
+def get_attn_weights(X,model):
+    model.eval()
+    save_output = SaveOutput()
+    patch_attention(model.layers[-1].self_attn)
+    hook_handle = model.layers[-1].self_attn.register_forward_hook(save_output)
+
+
+    with torch.no_grad():
+        out = model(X)
+
+    print(save_output.outputs[0][0])
+    print(save_output.outputs)
+    return save_output.outputs
+
 
 
 
@@ -104,12 +141,18 @@ def test_vivit():
     print('Trainable Parameters: %.3fM' % parameters)
     
     out = model(img)
+    get_attn_weights(img,model)
     
     print("Testing is suceessful, shape of out :", out.shape)      # [B, num_classes] 
 
+
+
+
 if __name__ == "__main__":
     FUNCTION_MAP = {'test' : test_vivit()}
-
+    """
+        run "python vivit --test" for vivit & attention extractino testing
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('command', choices=FUNCTION_MAP.keys(),
                         help="test: run vivit test case")
