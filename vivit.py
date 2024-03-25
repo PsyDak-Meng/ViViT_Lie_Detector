@@ -5,8 +5,16 @@ from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 from module import Attention, PreNorm, FeedForward
 import numpy as np
+from math import ceil
 import argparse
-from CONSTANTS import BATCH_SIZE, PATCH_SIZE, IMG_SIZE, FRAME_NUM
+from CONSTANTS import BATCH_SIZE, PATCH_SIZE, IMG_SIZE, FRAME_NUM, EPOCH
+import zipfile
+from tqdm import tqdm
+import io
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
 
 class Transformer(nn.Module):
     def __init__(self, dim, depth, heads, dim_head, mlp_dim, dropout = 0.):
@@ -26,20 +34,21 @@ class Transformer(nn.Module):
         return self.norm(x)
 
 
-  
+
 class ViViT(nn.Module):
-    def __init__(self, image_size, patch_size, num_classes, num_frames, dim = 192, depth = 4, heads = 3, pool = 'cls', in_channels = 3, dim_head = 64, dropout = 0.,
+    def __init__(self, image_size_w, image_size_h, patch_size_w, patch_size_h, num_classes, num_frames, dim = 192, depth = 4, heads = 3, pool = 'cls', in_channels = 3, dim_head = 64, dropout = 0.,
                  emb_dropout = 0., scale_dim = 4, ):
         super().__init__()
-        
+
         assert pool in {'cls', 'mean'}, 'pool type must be either cls (cls token) or mean (mean pooling)'
 
 
-        assert image_size % patch_size == 0, 'Image dimensions must be divisible by the patch size.'
-        num_patches = (image_size // patch_size) ** 2
-        patch_dim = in_channels * patch_size ** 2
+        assert image_size_w % patch_size_w == 0 and image_size_h % patch_size_h ==0, 'Image dimensions must be divisible by the patch size.'
+        assert image_size_w/patch_size_w == image_size_h/patch_size_h, 'Need to use same number of patches on width & height.'
+        num_patches = (image_size_w // patch_size_w) ** 2
+        patch_dim = in_channels * patch_size_w * patch_size_h
         self.to_patch_embedding = nn.Sequential(
-            Rearrange('b t c (h p1) (w p2) -> b t (h w) (p1 p2 c)', p1 = patch_size, p2 = patch_size),
+            Rearrange('b t c (h p1) (w p2) -> b t (h w) (p1 p2 c)', p1 = patch_size_h, p2 = patch_size_w),
             nn.Linear(patch_dim, dim),
         )
 
@@ -75,91 +84,13 @@ class ViViT(nn.Module):
         x = torch.cat((cls_temporal_tokens, x), dim=1)
 
         x = self.temporal_transformer(x)
-        
+
 
         x = x.mean(dim = 1) if self.pool == 'mean' else x[:, 0]
 
         return self.mlp_head(x)
 
 
-#TODO: Add training & testing step
-    
-
-
-
-#TODO: Extract attention weights
-def patch_attention(m):
-    forward_orig = m.forward
-
-    def wrap(*args, **kwargs):
-        kwargs["need_weights"] = True
-        kwargs["average_attn_weights"] = False
-
-        return forward_orig(*args, **kwargs)
-
-    m.forward = wrap
-
-
-class SaveOutput:
-    def __init__(self):
-        self.outputs = []
-
-    def __call__(self, module, module_in, module_out):
-        self.outputs.append(module_out[1])
-
-    def clear(self):
-        self.outputs = []
-
-
-def get_attn_weights(X,model):
-    model.eval()
-    save_output = SaveOutput()
-    patch_attention(model.layers[-1].self_attn)
-    hook_handle = model.layers[-1].self_attn.register_forward_hook(save_output)
-
-
-    with torch.no_grad():
-        out = model(X)
-
-    print(save_output.outputs[0][0])
-    print(save_output.outputs)
-    return save_output.outputs
-
-
-
-
-    
-def test_vivit():
-    img = torch.ones([1, 16, 3, 224, 224]).cuda()
-    
-    model = ViViT(image_size=IMG_SIZE,
-                   patch_size=PATCH_SIZE,
-                     num_classes=2, 
-                     num_frames=FRAME_NUM).cuda()
-    parameters = filter(lambda p: p.requires_grad, model.parameters())
-    parameters = sum([np.prod(p.size()) for p in parameters]) / 1_000_000
-    print('Trainable Parameters: %.3fM' % parameters)
-    
-    out = model(img)
-    get_attn_weights(img,model)
-    
-    print("Testing is suceessful, shape of out :", out.shape)      # [B, num_classes] 
-
-
-
-
-if __name__ == "__main__":
-    FUNCTION_MAP = {'test' : test_vivit()}
-    """
-        run "python vivit --test" for vivit & attention extractino testing
-    """
-    parser = argparse.ArgumentParser()
-    parser.add_argument('command', choices=FUNCTION_MAP.keys(),
-                        help="test: run vivit test case")
-    args = parser.parse_args()
-
-    func = FUNCTION_MAP[args.command]
-    func()
 
 
 
