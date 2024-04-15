@@ -7,13 +7,16 @@ from module import Attention, PreNorm, FeedForward
 import numpy as np
 from math import ceil
 import argparse
-from CONSTANTS import BATCH_SIZE, PATCH_SIZE, IMG_SIZE, FRAME_NUM, EPOCH
+from CONSTANTS import BATCH_SIZE, PATCH_SIZE, IMG_SIZE, FRAME_NUM
 import zipfile
 from tqdm import tqdm
 import io
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+
+
+
 
 
 class Transformer(nn.Module):
@@ -87,11 +90,10 @@ class ViViT(nn.Module):
 
 
         x = x.mean(dim = 1) if self.pool == 'mean' else x[:, 0]
+        x = self.mlp_head(x)
+        # print(x.shape)
 
-        return self.mlp_head(x)
-
-
-
+        return x
 
 
     

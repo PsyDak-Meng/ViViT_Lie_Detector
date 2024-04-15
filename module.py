@@ -49,6 +49,9 @@ class Attention(nn.Module):
             nn.Dropout(dropout)
         ) if project_out else nn.Identity()
 
+        self.attn_weights = torch.Tensor([])
+
+
     def forward(self, x):
         b, n, _, h = *x.shape, self.heads
         qkv = self.to_qkv(x).chunk(3, dim = -1)
@@ -57,9 +60,10 @@ class Attention(nn.Module):
         dots = einsum('b h i d, b h j d -> b h i j', q, k) * self.scale
 
         attn = dots.softmax(dim=-1)
-
+        
         out = einsum('b h i j, b h j d -> b h i d', attn, v)
         out = rearrange(out, 'b h n d -> b n (h d)')
+        self.attn_weights = out
         out =  self.to_out(out)
         return out
 
