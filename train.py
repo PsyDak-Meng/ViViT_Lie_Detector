@@ -1,6 +1,6 @@
 import torch
 from torch import nn, einsum
-import torch.nn.functional as F
+import torch.nn.functional as F 
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 from module import Attention, PreNorm, FeedForward
@@ -24,12 +24,8 @@ def train(model, epoch, X_train, X_test, y_train, y_test, optimizer, criterion):
     BATCH = ceil(X_train.shape[0] / BATCH_SIZE)
     train_loss = 0
 
-    # record least loss
-    best_val_loss = float('inf')
-    best_epoch = 0
-
     for epoch in tqdm(range(20)):
-        model.train() # train mode
+        model.train()
         optimizer.zero_grad()
         batch_count = 0
         while batch_count < BATCH:
@@ -48,22 +44,8 @@ def train(model, epoch, X_train, X_test, y_train, y_test, optimizer, criterion):
         train_loss /= BATCH
         print(f'Epoch {epoch + 1}, Training Loss: {loss.item()}')
 
-        # TODO: model.save() on best epoch
-        model.eval()  # switch to evaluation mode
-        with torch.no_grad():
-            X_val = X_test.type(torch.float32).to(device)
-            y_val = y_test.type(torch.long).squeeze().to(device)
-            val_outputs = model(X_val)
-            val_loss = criterion(val_outputs, y_val)
-            print(f'Epoch {epoch + 1}, Validation Loss: {val_loss.item()}')
 
-            # save model loss if better
-            if val_loss < best_val_loss:
-                best_val_loss = val_loss
-                best_epoch = epoch + 1
-                torch.save(model.state_dict(), 'best_model.pth')  # Save the model
 
-    print(f'Best Validation Loss: {best_val_loss.item()} at Epoch {best_epoch}')
 
     # testing
     model_test = model.to(torch.device('cpu'))
@@ -76,6 +58,9 @@ def train(model, epoch, X_train, X_test, y_train, y_test, optimizer, criterion):
     accuracy = accuracy_score(y_test.cpu().numpy(), predicted.cpu().numpy())
 
     print(f'Epoch {epoch + 1}, Training Loss: {loss.item()}, Test Loss: {test_loss.item()}, Accuracy: {accuracy}')
+
+
+
 
 
 #TODO: Extract attention weights
@@ -188,9 +173,9 @@ if __name__ == "__main__":
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     criterion = nn.CrossEntropyLoss()
 
-    
 
-    
+
+
     # PARSE ARGUMENTS
     FUNCTION_MAP = {'train' : train(model, EPOCH, X_train, X_test, y_train, y_test, optimizer, criterion)
 }
