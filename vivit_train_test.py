@@ -26,7 +26,7 @@ class Transformer(nn.Module):
         return self.norm(x)
 
 
-  
+
 class ViViT(nn.Module):
     def __init__(self, image_size, patch_size, num_classes, num_frames, dim = 192, depth = 4, heads = 3, pool = 'cls', in_channels = 3, dim_head = 64, dropout = 0.,
                  emb_dropout = 0., scale_dim = 4, ):
@@ -76,13 +76,12 @@ class ViViT(nn.Module):
 
         x = self.temporal_transformer(x)
         
-
         x = x.mean(dim = 1) if self.pool == 'mean' else x[:, 0]
 
         return self.mlp_head(x)
     
     
-    
+
 
 if __name__ == "__main__":
 
