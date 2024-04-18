@@ -177,9 +177,11 @@
             <br>Instead of sampling key frames by uniform sampling and Tubelet embedding, we use a technique called Facial Action Unit (FAU) tracking. A FAU is a term used in facial expression analysis and the study of human facial movements. It was introduced by psychologists Paul Ekman and Wallace V. Friesen as part of their Facial Action Coding System (FACS). We can calculate FAU intensity using facial landmarks. Higher FAU intensity means higher likelihood of micro expressions. In the context of lie detection, micro expressions can be a good indicator of whether the person is lying. Thus, by sampling key frames with high intensity, we can capture frames more relevant to the prediction.
             <br>Here is how FAU based frame sampling works. At first, "get_frontal_face_detector" function from the dlib library was utilized to detect faces in the frames. Then "shape_predictor_68_face_landmarks" was applied as a predictor to identify 68 points along the contour of the face (Figure 3). Using these landmarks, 10 facial action units such as inner brow raiser, outer brow raiser, brow lowerer, cheek raiser, eye lid tightener, nose wrinkler lip corner puller, lip corner depressor, and lip part were calculated to track facial actions.A signal was obtained for each FAU. The "find_peaks_cwt" function from the scipy.signal library was used to detect peaks.
             <img src="web_data/FAU_detection.png">
-            <img src="web_data/Per_FAU_unique_peaks.png">
             <br>From 10 FAUs, we got 10 sets of peaks. Next, we identified the unique peaks from all 10 sets. Finally, we filtered the unique peaks by selecting one peaks for 5 consecutive frames.
-            <img src="web_data/All_unique_peaks.png">
+            <div class="column">
+                <img src="web_data/Per_FAU_unique_peaks.png"> 
+                <img src="web_data/All_unique_peaks.png">
+            <div>
             <br><br><b>Framework:</b> The video is processed through FAU, then the high intensity frames are extracted for the ViViT model, each video sample is represented as a 4-dimensional array [frame_num, height, width,channel], where frame numbers are padded to the maximum length. By using the vision transformer architecture, we are allowing inputs of different temporal lengths, which makes the framework flexible. Lastly, the ViViT outputs a percentage prediction that predicts the veracity label of  a given video.
             </p>
     </section>
