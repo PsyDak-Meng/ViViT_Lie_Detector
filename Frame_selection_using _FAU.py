@@ -80,7 +80,7 @@ directory_path = f'C:/Users\Fkhan\OneDrive - Georgia Institute of Technology\Cou
 video_file_names = os.listdir(directory_path)
 
 #iterate through all the files 
-for file_name in video_file_names[1:2]:
+for file_name in video_file_names:
     #video_file_name = "BF015_1PT.wmv"
     video_path = f'{directory_path}/{file_name}'
     cap = cv2.VideoCapture(video_path)
@@ -171,7 +171,7 @@ for file_name in video_file_names[1:2]:
         # Iterate through each points of the AU 
         for j in range (np.shape(sequence)[1]):
             seq = [au_seq[j] for au_seq in sequence]
-            peaks, filtered_sequence = peak_cwt(seq)
+            peaks, filtered_sequence = peak_def(seq)
             combined_peaks = combined_peaks + [peaks]
         #flatten the peaks
         flattened_peaks = [item for sublist in combined_peaks for item in sublist]
@@ -205,15 +205,18 @@ for file_name in video_file_names[1:2]:
         plt.title(f' {frame_num}th Frame from the Video')
         plt.axis('off')
         plt.show()
-
+    plt.savefig (f'C:/Users\Fkhan\OneDrive - Georgia Institute of Technology\Coursework\Spring 2024\CS 6476\Group_project\MU3D_processed/FAU_peaks/{file_name}.png')
+    plt.close('all')
+    
     #Merge peaks based on different AUs
     flattened_all_peaks = [item for sublist in FAU_peaks for lists in FAU_peaks[sublist] for item in lists]
     unique_all_peaks = remove_duplicates_within_range(sorted(set(flattened_all_peaks)),5)
-    save_path = f'C:/Users\Fkhan\OneDrive - Georgia Institute of Technology\Coursework\Spring 2024\CS 6476\Group_project\MU3D_processed/{file_name}'
+    save_path = f'C:/Users\Fkhan\OneDrive - Georgia Institute of Technology\Coursework\Spring 2024\CS 6476\Group_project\MU3D_processed/filtered_image_stack'
     
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     
+    """
     # Iterate through all the peaks, plot corresponding frames.
     for i in unique_all_peaks:
         frame_num = i
@@ -228,10 +231,12 @@ for file_name in video_file_names[1:2]:
         
         plt.savefig (f'{save_path}/{i}.png')
         plt.close('all')
-    
+    """
+    filtered_image_stack = stacked_frames[unique_all_peaks]
+    np.save(f'{save_path}/{file_name}.npy', filtered_image_stack)
     #Save peaks for each AU as a dictionary
     # Specify the file path
-    dict_path = f'{save_path}/peaks_dictionary.json'
+    dict_path = f'{save_path}/{file_name}_peaks_dictionary.json'
     
     # Save the dictionary to a JSON file
     with open(dict_path, 'w') as json_file:
@@ -239,7 +244,7 @@ for file_name in video_file_names[1:2]:
     
     # Save the list of significant frames
     # Specify the file path
-    list_path = f'{save_path}/unique_peaks.json'
+    list_path = f'{save_path}/{file_name}_unique_peaks.json'
     # Save the list to a CSV file
     with open(list_path, 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
