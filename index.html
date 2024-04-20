@@ -188,8 +188,14 @@
                     <p><center>Unique frames combined from all FAU signals (with filtering)</center></p>
                 </div>
             </div>
-            <br><br><b>Framework:</b> The video is processed through FAU, then the high intensity frames are extracted for the ViViT model, each video sample is represented as a 4-dimensional array [frame_num, height, width,channel], where frame numbers are padded to the maximum length. By using the vision transformer architecture, we are allowing inputs of different temporal lengths, which makes the framework flexible. Lastly, the ViViT outputs a percentage prediction that predicts the veracity label of  a given video.
-            </p>
+        </p>
+        <p><b>Framework:</b></p> 
+        <p>The video is processed through FAU, then the high intensity frames are extracted for the ViViT model, each video sample is represented as a 4-dimensional array [frame_num, height, width,channel], where frame numbers are padded to the maximum length. By using the vision transformer architecture, we are allowing inputs of different temporal lengths, which makes the framework flexible. Lastly, the ViViT outputs a percentage prediction that predicts the veracity label of  a given video.
+        <p><b>Result and Discussion:</b></p> 
+        <p>The final accuracy of our model is around 59 percent. This is not an ideal result, but we have some theory on what the underlying issue is. First, since almost no body language is involved in all the videos, the only useful insight we can extract from each frame is the person’s expressions. And because expressions are mostly micro compared to pronounced ones like crying or laughing, the difference between each frame is relatively small. This means even though FAU tries to sample frames with most insights, the number of pixels in each frame that are useful is still very small. Useful pixels could be buried by the large number of non-insightful pixels in the frame. Second, our dataset of 321 videos is very small compared to what’s used in state-of-the-art models. If we were to artificially inflate the sample size using bootstrapping, there could be even more overfitting. It is rather difficult to properly train the weights when the sample size is very small compared to the number of parameters—the degree of freedom for parameters is just too large. In an ideal scenario, we would be fine tuning the model from some pre-trained weights. Unfortunately, ViViT is quite new and there aren’t pre-trained weights available.
+        <p><b>Future Work:</b></p> 
+        <p>We believe the issues discussed above likely contributed to the non-ideal performance of our mode. And we are confident that model accuracy will significantly improve. Specifically, if we can develop some algorithm to only capture pixels where micro-expressions are present and discard the rest “static” pixels, the model could extract more insight. And if we have the compute resources and dataset to train the model on a large set of videos (preferably more than 10k), we could have accuracy level comparable to that of commercial models. We feel those are out of the scope of this course, but we are excited to explore more in the future.
+            
     </section>
 </body>
 </html>
