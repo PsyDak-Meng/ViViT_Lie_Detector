@@ -151,8 +151,8 @@
     <section id="related">
         <h2>Related Work</h2>
         <!-- <p><b>Project Significance</b></p> -->
-        <p>
-            <p><b>ViViT:</b></p>
+        <p> <p>To correctly predict if a person is lying, we need to know how to extract features such as expressions that might potentially indicate a person's guilt or unease. We look at various models and architectures to see if there is some aspect we can improve.   
+        </p><p><b>ViViT:</b></p>
             <p>
             Uses transformer architecture to achieve video classification by passing in temporal frame patches. Specifically, the model uses three variants of attention to factorize the spatial and temporal dimensions of the input. It enables the model to regularize effectively even if the training data is not large enough.
             </p>
@@ -228,7 +228,11 @@
         <p>We made use of the ‘Miami University Deception Detection Database’ that contains 300+ videos of interviewees speaking of truthful and lying statements that come with demographic information, sentiment analysis and transcripts. We selected it because it has good size and was used in the original research team's study which returned good results. The video frame is also clean, which has the person’s face occupying the center of the frame. 
         </p><p><b>Framework:</b></p> 
         <p>The video is processed through FAU, then the high intensity frames are extracted for the ViViT model, each video sample is represented as a 4-dimensional array [frame_num, height, width,channel], where frame numbers are padded to the maximum length. By using the vision transformer architecture, we are allowing inputs of different temporal lengths, which makes the framework flexible. Lastly, the ViViT outputs a percentage prediction that predicts the veracity label of  a given video.
-         
+        <p><b> Experiment purpose:</b>
+        <p>By using Fast Action Unit (FAU) to sample frames instead of uniform sampling used in ViViT, we hope to sample more insightful frames to feed into the model. We will test our model pipeline—ViViT using FAU sampling against ViViT using uniform sampling from the original paper to see if the result improves.
+        </p><p><b> Metrics and desired outputs:</b></p>
+        <p>After training two models using FAU-sampled frames and uniform sampled frames respectively, we will use both models to see if there is lying in the test frames. We will use accuracy, precision, recall and F1 to measure the performance of both models. Ideally, the ViViT model trained using FAU-sampled should perform better than the baseline one using uniform sampling.
+        </p>      
     </section>
 
      <section id="result">
