@@ -95,20 +95,8 @@
         </section>
     </header>
 
-    <section id="introduction">
-        <h2>Introduction</h2>
-        <!-- <p><b>Project Significance</b></p> -->
-        <p>The main purpose of the project is to classify from video data whether an individual is lying and to extract key frames from the video and analyze the extracted expression to achieve algorithmic explainability. Detecting when a person is lying through a rigorously-tested AI model can play a significant role in judicial and legal settings, where an individual’s demeanor and facial expressions can indicate whether or not they are telling the truth. 
-            <br>From an objective standpoint, the AI is highly unlikely to discriminate or bias, but rather classify whether or not the defendant (or accuser) is lying when under question. Regarding a criminal case, it is immediately apparent the advantages of a lie detector in determining the innocence or guiltiness of the accused in a court of law. Theoretically, the lie detector AI can play a considerable role in any political, economic, or medical institution, including holding a presidential candidate accountable to the information they may claim in a debate or the credibility of any doctors when under question of their practice. 
-        </p> 
-        <br>
-        <p>
-            <a href="https://docs.google.com/document/d/1P7fegZg60AUPF6zrQvOQy1gjKOaAqY5PR2XE-3iDXzM/edit">See full report</a>
-            </p>
-    </section>
-
     <section id="interpret">
-        <h2>AI Interpretability</h2>
+        <h2>Model Showcase</h2>
         <div class="video-container">
             <div class="row">
                 <div class="column">
@@ -148,8 +136,60 @@
         </div>
     </section>
 
+    <section id="introduction">
+        <h2>Introduction</h2>
+        <!-- <p><b>Project Significance</b></p> -->
+        <p>The main purpose of the project is to classify from video data whether an individual is lying and to extract key frames from the video and analyze the extracted expression to achieve algorithmic explainability. Detecting when a person is lying through a rigorously-tested AI model can play a significant role in judicial and legal settings, where an individual’s demeanor and facial expressions can indicate whether or not they are telling the truth. 
+        </p>     
+        <p>From an objective standpoint, the AI is highly unlikely to discriminate or bias, but rather classify whether or not the defendant (or accuser) is lying when under question. Regarding a criminal case, it is immediately apparent the advantages of a lie detector in determining the innocence or guiltiness of the accused in a court of law. Theoretically, the lie detector AI can play a considerable role in any political, economic, or medical institution, including holding a presidential candidate accountable to the information they may claim in a debate or the credibility of any doctors when under question of their practice. 
+        </p> 
+        <p>
+            <a href="https://docs.google.com/document/d/1P7fegZg60AUPF6zrQvOQy1gjKOaAqY5PR2XE-3iDXzM/edit">See full report</a>
+            </p>
+    </section>
+
+    <section id="related">
+        <h2>Related Work</h2>
+        <!-- <p><b>Project Significance</b></p> -->
+        <p>
+            <p><b>ViViT:</b></p>
+            <p>
+            Uses transformer architecture to achieve video classification by passing in temporal frame patches. Specifically, the model uses three variants of attention to factorize the spatial and temporal dimensions of the input. It enables the model to regularize effectively even if the training data is not large enough.
+            </p>
+            <p>Arnab, A., Dehghani, M., Heigold, G., Sun, C., Lučić, M., & Schmid, C. (2021). Vivit: A video vision transformer. In Proceedings of the IEEE/CVF international conference on computer vision (pp. 6836-6846).
+            </p>
+            <p><b>Deep Lie: Detect Lies with Facial Expression:</b></p>  	 
+            <p>
+            This Stanford paper uses a computer vision-based approach to detecting lies in video streams, improving upon previous work on the same subject from 2017. Compared to previous work, the model proposed in this paper trains a separate facial expression recognizer to capture key frames with pronounced expressions.
+             </p>      
+             <p>Feng, K. (2021). DeepLie: Detect Lies with Facial Expression (Computer Vision). CS230: Deep Learning, Spring 2021, Stanford University, CA. https://cs230.stanford.edu/projects_spring_2021/reports/0.pdf
+            </p>   	 
+            <p><b>Lie Detector AI: Detecting Lies Through Fear:</b></p>
+            <p>This paper uses OpenFace software in conjunction with a random forest classifier to classify videos into truthful or deceitful. Following a CNN with a random forest classifier improves the accuracy from 52% with only CNN to 86%.
+            </p><p>Kafadar, V. A., Ullmann, L., Haudenschild, J., Kafadar, V. A., & Tschakert, H. (2022). Lie Detector AI: Detecting Lies Through Fear. https://doi.org/10.13140/RG.2.2.18265.19040
+            </p>  	 
+            <p><b>Facial expression recognition using CV:</b></p> 
+            <p>The study focuses on the classification of emotion based on human facial expressions. Methods included face detection, PCA, smoothing (pre-processing), Optical flow (feature extraction), and Gabor filters. Includes various datasets for facial expression recognition.  
+            </p>
+            <p>Canedo, D., & Neves, A. J. R. (2019). Facial Expression Recognition Using Computer Vision: A Systematic Review. Applied Sciences 2019, Vol. 9, Page 4678, 9(21), 4678. https://doi.org/10.3390/APP9214678
+            </p>
+            <p><b>Face-Focused Cross-Stream Network for Deception Detection in Videos:</b></p> 
+            <p>
+            This study implemented both face expression and body gestures for deception detection. A face detection algorithm detected the roi for the face and the rest of the frame was used for motion detection and tracking. A correlation learning was performed for joint deep feature learning from face expression and motion. They also added adversarial learning and meta learning to ameliorate for lack of training data. 
+            </p><p>Ding, M., Ding, M., Ding, M., Zhao, A., Zhao, A., Lu, Z., Lu, Z., Xiang, T., Xiang, T., Wen, J.-R., Wen, J.-R., Wen, J.-R., & Wen, J.-R. (2019). Face-Focused Cross-Stream Network for Deception Detection in Videos. Computer Vision and Pattern Recognition. https://doi.org/10.1109/cvpr.2019.00799
+            </p>
+            <p><b>Unmasking the Devil in the Details:What Works for Deep Facial Action Coding?:</b></p>
+            <p>This study explored detection of facial action unit occurrence and estimation of facial action unit intensity using deep learning. Effects of different components and parameters such as normalization, model architecture, training set size, optimizer and learning rate on model performance were investigated. 
+            </p><p>Niinuma, K., Jeni, L. A., Onal Ertugrul, I., & Cohn, J. F. (n.d.). Unmasking the Devil in the Details: What Works for Deep Facial Action Coding?
+            </p><p>https://bmvc2019.org/wp-content/uploads/papers/0403-paper.pdf
+            </p></p> 
+        <br>
+    </section>
+
+    
+
     <section id="framework">
-        <h2>Framework</h2>
+        <h2>Methodology</h2>
         <div class="row">
             <div class="column">
                 <img src="web_data/framework.jpg" alt="FRAMEWORK" id="framework_img">
@@ -160,7 +200,7 @@
             </div>
             
         </div>
-        <p><b>Methodology:</b></p>
+        <p><b>ViViT:</b></p>
         <p>The ViViT model first extracts spatial-temporal tokens from the input video by embedding, which are then encoded by a series of transformer layers. The model then uses several variations of attention to factorize the large spatial and temporal dimensions of the video. Specifically, it uses a factorized encoder layer, a factorized self-attention layer, or a factorized dot-product layer. In our case, we primarily use a factorized self-attention layer. This allows us to effectively train and regularize the model when the datasets are not large enough.
             <br><br><b>Problem with sampling key frames in ViViT:</b>
             <br>While ViViT achieved good results on video classification, however, the two methods used to sample frames --1) uniform sampling: Uniformly sampling picture frames from the video with fixed time span and dividing into image patches; 2) Tubelet embedding: selecting fixed time span of patches in frames into embeddings, are both arguably flawed for capturing transient frames such as micro expressions. Uniform sampling has no guarantee of capturing the exact high-relevance frames, and Tubelet embedding can result in low attention weights of tubes containing high-relevance frames because of additional low-relevance expressions. As a result, we would like to improve the sampling process to obtain more relevant key frames.
@@ -180,31 +220,37 @@
                 </div>
             </div>
         </p>
-    </section>
-    <section id="Experimental Setup">
-        <h2>Experimental Setup</h2>
-        <p><b>Experiment purpose:</b></p> 
+        </section>
+
+     <section id="es">
+        <h2>Experiment Setup</h2>
+        <p><b>Dataset:</b></p>
+        <p>We made use of the ‘Miami University Deception Detection Database’ that contains 300+ videos of interviewees speaking of truthful and lying statements that come with demographic information, sentiment analysis and transcripts. We selected it because it has good size and was used in the original research team's study which returned good results. The video frame is also clean, which has the person’s face occupying the center of the frame. 
+        </p><p><b>Framework:</b></p> 
         <p>The video is processed through FAU, then the high intensity frames are extracted for the ViViT model, each video sample is represented as a 4-dimensional array [frame_num, height, width,channel], where frame numbers are padded to the maximum length. By using the vision transformer architecture, we are allowing inputs of different temporal lengths, which makes the framework flexible. Lastly, the ViViT outputs a percentage prediction that predicts the veracity label of  a given video.
+         
+    </section>
+
+     <section id="result">
+        <h2>Results and Discussion</h2>
         <img src="web_data/Result.png" alt="FRAMEWORK">
         <p><center>Model Results on Test Data</center></p>
-        <p><b>Input Description:</b></p>
-        We have processed and extracted significant frames from all 360 videos. The FAU extracted a maximum sequence length of 105 frames per video. There was discrepancy in the height and width of frames in different videos. To make all the frames same size, padding was done. Moreover, number of significant frames for each videos are not constant. So, we added additional blank frames to make all the video extraction containing 120 frames. Final size of each video extraction is 120x480x880x3
-        <p><b>Desired Output:</b></p>
+        <p>The final accuracy of our model is around 59 percent. This is not an ideal result, but we have some theory on what the underlying issue is. First, since almost no body language is involved in all the videos, the only useful insight we can extract from each frame is the person’s expressions. And because expressions are mostly micro compared to pronounced ones like crying or laughing, the difference between each frame is relatively small. This means even though FAU tries to sample frames with most insights, the number of pixels in each frame that are useful is still very small. Useful pixels could be buried by the large number of non-insightful pixels in the frame. Second, our dataset of 321 videos is very small compared to what’s used in state-of-the-art models. If we were to artificially inflate the sample size using bootstrapping, there could be even more overfitting. It is rather difficult to properly train the weights when the sample size is very small compared to the number of parameters—the degree of freedom for parameters is just too large. In an ideal scenario, we would be fine tuning the model from some pre-trained weights. Unfortunately, ViViT is quite new and there aren’t pre-trained weights available.
     </section>
-    <section id="Results and Discussion">
-        <h2>Result and Discussion:</h2>
-        <p>The final accuracy of our model is around 63 percent. This is not an ideal result, but we have some theory on what the underlying issue is. First, since almost no body language is involved in all the videos, the only useful insight we can extract from each frame is the person’s expressions. And because expressions are mostly micro compared to pronounced ones like crying or laughing, the difference between each frame is relatively small. This means even though FAU tries to sample frames with most insights, the number of pixels in each frame that are useful is still very small. Useful pixels could be buried by the large number of non-insightful pixels in the frame. Second, our dataset of 321 videos is very small compared to what’s used in state-of-the-art models. If we were to artificially inflate the sample size using bootstrapping, there could be even more overfitting. It is rather difficult to properly train the weights when the sample size is very small compared to the number of parameters—the degree of freedom for parameters is just too large. In an ideal scenario, we would be fine tuning the model from some pre-trained weights. Unfortunately, ViViT is quite new and there aren’t pre-trained weights available.
-        <img src="web_data/Result.png" alt="FRAMEWORK">
-        <p><b>Future Work:</b></p> 
+
+    <section id="future work">
+        <h2>Challenges and Future Work</h2>
         <p>We believe the issues discussed above likely contributed to the non-ideal performance of our model. And we are confident that model accuracy will significantly improve. Specifically, if we can develop some algorithm to only capture pixels where micro-expressions are present and discard the rest “static” pixels, the model could extract more insight. And if we have the compute resources and dataset to train the model on a large set of videos (preferably more than 10k), we could have accuracy level comparable to that of commercial models. We feel those are out of the scope of this course, but we are excited to explore more in the future.
     </section>
-        <section id="Challenges Encountered">
-        <h2>Challenges Encountered:</h2>
-    </section>
-    </section>
-        <section id="Team Members Contribution">
-        <h2>Team Members Contribution:</h2>
-    </section>
+
+    <section id="tmc">
+        <h2>Team Member Contribution</h2>
+        <p>Cheting Meng: Build dataloader, Model architecture, Model training, Experiments
+   	    </p><p>Vikram Sagar: Introduction/Problem definition, train/test data split and model training
+  	    </p><p>Yiheng Mao: Related work, Methodology, Result, Discussion, Future Work
+   	    </p><p>Farhan Khan: FAU calculation, video processing, peaks detection from FAU intensity timeline, key frame extraction
+        </p></section>
+          
     
 </body>
 </html>
